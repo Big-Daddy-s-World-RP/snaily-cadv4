@@ -40,6 +40,22 @@ const nextConfig = {
         hostname: "localhost",
         pathname: "**"
       },
+      {
+        protocol: "https",
+        hostname: "cad.bigdaddy.gg",
+        pathname: "**"
+      },
+      {
+        protocol: "https",
+        hostname: "cad-api.bigdaddy.gg",
+        pathname: "**"
+      },
+      // BDRP DEVELOPMENT
+      {
+        protocol: "http",
+        hostname: "192.168.0.50",
+        pathname: "**"
+      }
     ]
   }, // end images
   // prettier-enable
