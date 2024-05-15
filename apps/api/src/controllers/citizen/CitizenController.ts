@@ -150,6 +150,41 @@ export class CitizenController {
     return { citizens, totalCount: citizensCount };
   }
 
+  @Get("/discord/:discordId")
+  async getCitizensByDiscordId(
+    @Context("cad") cad: { features?: Record<Feature, boolean> },
+    @Context("user") user: User,
+    @PathParams("discordId") discordId: string,
+  ): Promise<APITypes.GetCitizensData> {
+    const checkCitizenUserId = shouldCheckCitizenUserId({ cad, user });
+
+    const citizens = await prisma.citizen.findMany({
+      where: {
+        user: {
+          discordId,
+        },
+        userId: checkCitizenUserId ? user.id : undefined,
+      },
+      include: citizenInclude,
+    });
+
+    return { citizens, totalCount: citizens.length };
+  }
+
+  @Get("/user/:userId")
+  async getCitizensByUserId(
+    @PathParams("userId") userId: string,
+  ): Promise<APITypes.GetCitizensData> {
+    const citizens = await prisma.citizen.findMany({
+      where: {
+        userId,
+      },
+      include: citizenInclude,
+    });
+
+    return { citizens, totalCount: citizens.length };
+  }
+
   @Get("/:id")
   async getCitizen(
     @Context("cad") cad: { features?: Record<Feature, boolean>; miscCadSettings: MiscCadSettings },
