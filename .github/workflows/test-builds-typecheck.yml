@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [18.x]
+        node-version: [18.x, 20.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -23,9 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8
           run_install: false
 
       - name: Get pnpm store directory
@@ -45,7 +44,7 @@ jobs:
         run: pnpm install
 
       - name: Build packages
-        run: pnpm turbo run build --filter="{packages/**/**}"
+        run: pnpm turbo run build --filter="{packages/*}"
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
@@ -53,7 +52,7 @@ jobs:
         run: pnpm turbo run typecheck
 
       - name: Build apps
-        run: pnpm turbo run build --filter="{apps/**/**}"
+        run: pnpm turbo run build --filter="{apps/*}"
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
